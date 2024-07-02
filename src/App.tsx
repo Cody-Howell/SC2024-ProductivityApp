@@ -1,25 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './scsscomp/App.css';
 
-class App extends React.Component {
+class App extends React.Component <{}, {counter: number}> {
+  constructor(props: any){
+    super(props);
+    this.state = {
+      counter: 0
+    }
+  }
+
+  incrementCounter = () => {
+    this.setState({counter: this.state.counter + 1});
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div id="App">
+        <h1>Hello!</h1>
+        <p onClick={this.incrementCounter} style={{userSelect: "none", cursor: "pointer"}}>Click to increment.</p>
+        <p>Count: {this.state.counter}</p>
       </div>
     );
   }

@@ -24,7 +24,14 @@ type Config = {
 };
 
 export function register(config?: Config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if (process.env.NODE_ENV === 'development' && 'serviceWorker' in navigator) {
+
+    // navigator.serviceWorker.register('/service-worker.ts')
+    //   .then(registration => {
+    //     console.log('Service Worker registered with scope:', registration.scope);
+    //   }).catch(error => {
+    //     console.error('Service Worker registration failed:', error);
+    //   });
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -35,21 +42,25 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-
+      
       if (isLocalhost) {
+        const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+        console.log("Is local host")
+        console.log(process.env)
         // This is running on localhost. Let's check if a service worker still exists or not.
         checkValidServiceWorker(swUrl, config);
-
+        
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA'
+            'worker. To learn more, visit https://cra.link/PWA'
           );
         });
       } else {
+        const swUrl = `${process.env.PUBLIC_URL}/challenges/summer2024/timetracker/service-worker.js`;
+        console.log("Is not localhost");
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);
       }
@@ -58,6 +69,7 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
+  console.log("register")
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
@@ -106,13 +118,14 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
   })
-    .then((response) => {
-      // Ensure service worker exists, and that we really are getting a JS file.
-      const contentType = response.headers.get('content-type');
-      if (
-        response.status === 404 ||
-        (contentType != null && contentType.indexOf('javascript') === -1)
-      ) {
+  .then((response) => {
+    // Ensure service worker exists, and that we really are getting a JS file.
+    const contentType = response.headers.get('content-type');
+    console.log(contentType)
+    if (
+      response.status === 404 ||
+      (contentType != null && contentType.indexOf('javascript') === -1)
+    ) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
